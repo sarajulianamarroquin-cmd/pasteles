@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Checkout SweetDreams{% endblock %}
+{% block content %}
+<section class="page-header container">
+    <div>
+        <h1>Checkout</h1>
+        <p>Confirma tu pedido y completa la información de entrega.</p>
+    </div>
+</section>
+
+<section class="container checkout-layout">
+    <form method="post" action="{{ url_for('orders.checkout') }}" class="checkout-form auth-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="field-group">
+            <label>Nombre completo</label>
+            <input type="text" name="full_name" required>
+        </div>
+        <div class="field-group">
+            <label>Teléfono</label>
+            <input type="tel" name="phone" required>
+        </div>
+        <div class="field-group">
+            <label>Dirección de entrega</label>
+            <textarea name="address" required></textarea>
+        </div>
+        <div class="field-group">
+            <label>Método de entrega</label>
+            <select name="delivery_method">
+                <option>Domicilio</option>
+                <option>Recoger en tienda</option>
+            </select>
+        </div>
+        <div class="field-group">
+            <label>Método de pago</label>
+            <select name="payment_method">
+                <option>Efectivo</option>
+                <option>Transferencia</option>
+                <option>Tarjeta</option>
+            </select>
+        </div>
+        <button type="submit" class="primary-btn">Confirmar pedido</button>
+    </form>
+    <aside class="checkout-summary">
+        <h3>Resumen</h3>
+        {% for item in items %}
+            <div class="summary-item">
+                <span>{{ item.product.name }} x {{ item.quantity }}</span>
+                <strong>${{ '{:,.0f}'.format(item.subtotal|float) }}</strong>
+            </div>
+        {% endfor %}
+        <div class="summary-row total"><span>Total</span><strong>${{ '{:,.0f}'.format(total|float) }}</strong></div>
+    </aside>
+</section>
+{% endblock %}

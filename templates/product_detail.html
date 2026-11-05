@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }}{% endblock %}
+{% block content %}
+<section class="container product-detail">
+    <div class="product-detail-image">
+        <img src="{{ product.image }}" alt="{{ product.name }}">
+    </div>
+    <div class="product-detail-info">
+        <p class="eyebrow">{{ product.category.name }}</p>
+        <h1>{{ product.name }}</h1>
+        <p class="price">COP ${{ '{:,.0f}'.format(product.price|float) }}</p>
+        <p>{{ product.description }}</p>
+        <ul class="product-meta">
+            <li>Disponibilidad: {% if product.available %}Disponible{% else %}Agotado{% endif %}</li>
+            <li>Stock: {{ product.stock }}</li>
+        </ul>
+        <form method="post" action="{{ url_for('cart.add_to_cart', product_id=product.id) }}" class="qty-form">
+            <label for="quantity">Cantidad</label>
+            <input type="number" min="1" max="{{ product.stock }}" name="quantity" value="1">
+            <button type="submit" class="primary-btn">Agregar al carrito</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

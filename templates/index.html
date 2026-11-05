@@ -1,0 +1,240 @@
+{% extends 'base.html' %}
+{% block title %}SweetDreams | Inicio{% endblock %}
+{% block content %}
+<section class="hero-section">
+    <div class="container hero-grid">
+        <div class="hero-copy">
+            <span class="eyebrow">Pequeños placeres, grandes momentos</span>
+            <h1>SweetDreams</h1>
+            <p class="subheading">Pastelería premium hecha para celebrar cada instante.</p>
+            <p class="hero-text">Desde brownies intensos hasta cheesecakes suaves, cada creación combina sabor artesanal, detalle visual y una experiencia memorable.</p>
+            <div class="hero-actions">
+                <a class="primary-btn" href="{{ url_for('products.products') }}">Descubrir nuestros postres</a>
+                <a class="secondary-btn" href="{{ url_for('main.recipes') }}">Explorar recetas</a>
+            </div>
+            <div class="hero-metrics">
+                <div><strong>12k+</strong><span>Clientes felices</span></div>
+                <div><strong>4.9/5</strong><span>Calificación media</span></div>
+                <div><strong>24h</strong><span>Entrega rápida</span></div>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="hero-card">
+                <img src="{{ url_for('static', filename='img/products/pastel-de-chocolate.svg') }}" alt="Ilustración de pastel de chocolate artesanal">
+            </div>
+            <div class="tag tag-left">Dulce y artesanal</div>
+            <div class="tag tag-right">Hecho con amor</div>
+        </div>
+    </div>
+</section>
+
+<section class="categories container">
+    {% for category in categories %}
+        <a class="category-item" href="{{ url_for('products.products', category=category.id) }}">
+            <div class="category-icon">{% if category.name == 'Pasteles' %}🎂{% elif category.name == 'Cheesecakes' %}🍰{% elif category.name == 'Brownies' %}🍫{% elif category.name == 'Galletas' %}🍪{% elif category.name == 'Cupcakes' %}🧁{% else %}✨{% endif %}</div>
+            <span>{{ category.name }}</span>
+        </a>
+    {% endfor %}
+</section>
+
+<section class="content-shell container">
+    <div class="section-header">
+        <div>
+            <h2>Productos destacados</h2>
+            <p>Lo más querido por nuestra comunidad de amantes del dulce.</p>
+        </div>
+        <a href="{{ url_for('products.products') }}" class="mini-link">Ver catálogo completo</a>
+    </div>
+    <div class="product-grid">
+        {% for product in featured %}
+            <article class="product-card">
+                <div class="product-badge">Popular</div>
+                <img src="{{ product.image }}" alt="{{ product.name }}">
+                <div class="product-body">
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.description }}</p>
+                    <div class="product-meta-row">
+                        <strong>COP ${{ '{:,.0f}'.format(product.price|float) }}</strong>
+                        <span>Disponible</span>
+                    </div>
+                    <div class="product-actions">
+                        <a href="{{ url_for('products.product_detail', product_id=product.id) }}" class="secondary-btn small">Ver detalles</a>
+                        <form method="post" action="{{ url_for('cart.add_to_cart', product_id=product.id) }}">
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="primary-btn small">Agregar</button>
+                        </form>
+                    </div>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="story-section container">
+    <div class="story-card">
+        <div class="story-copy">
+            <span class="section-kicker">Nuestra historia</span>
+            <h2>SweetDreams nació para convertir cada celebración en un recuerdo delicioso.</h2>
+            <p>Comenzamos con una idea simple: crear postres que no solo se vean increíble, sino que también cuenten historias, generen sonrisas y hagan sentir cada momento especial.</p>
+            <p>Hoy trabajamos con ingredientes premium, recetas artesanales y un cuidado absoluto en cada preparación para que cada entrega sea una experiencia memorable.</p>
+        </div>
+        <div class="story-visual">
+            <img src="{{ url_for('static', filename='img/products/torta-de-vainilla-y-arequipe.svg') }}" alt="Ilustración de pastelería artesanal">
+        </div>
+    </div>
+</section>
+
+<section class="process-section container">
+    <div class="section-header">
+        <div>
+            <h2>Cómo elaboramos cada postre</h2>
+            <p>Un proceso cuidadoso, creativo y lleno de sabor.</p>
+        </div>
+    </div>
+    <div class="steps-grid">
+        <div class="step-card">
+            <span>01</span>
+            <h3>Elegimos ingredientes</h3>
+            <p>Seleccionamos materia prima premium para asegurar aroma, textura y calidad.</p>
+        </div>
+        <div class="step-card">
+            <span>02</span>
+            <h3>Preparamos con detalle</h3>
+            <p>Cada receta se mezcla con paciencia para lograr el equilibrio perfecto entre sabor y presentación.</p>
+        </div>
+        <div class="step-card">
+            <span>03</span>
+            <h3>Decoramos con estilo</h3>
+            <p>La última capa es la que convierte el postre en una experiencia visual y culinaria.</p>
+        </div>
+    </div>
+</section>
+
+<section class="showcase container">
+    <div class="showcase-left">
+        <div class="section-header compact">
+            <h2>Recetas favoritas</h2>
+        </div>
+        <div class="steps">
+            {% for recipe in recipes %}
+                <a class="step-card recipe-tile" href="{{ url_for('main.recipe_detail', recipe_id=recipe.id) }}">
+                    <img src="{{ recipe.image }}" alt="" loading="lazy">
+                    <div class="recipe-tile-copy">
+                        <h4>{{ recipe.name }}</h4>
+                        <p>{{ recipe.description }}</p>
+                    </div>
+                    <span class="recipe-tile-arrow">→</span>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    <aside class="mini-cart">
+        <h3>Tu carrito</h3>
+        <div class="mini-cart-item">
+            <img src="{{ url_for('static', filename='img/products/postre-en-vaso-oreo.svg') }}" alt="Ilustración de postre de Oreo">
+            <div>
+                <strong>Postre en Vaso Oreo</strong>
+                <span>$10.000</span>
+            </div>
+            <div class="qty-control">
+                <button type="button">-</button>
+                <span>1</span>
+                <button type="button">+</button>
+            </div>
+        </div>
+        <div class="mini-cart-item">
+            <img src="{{ url_for('static', filename='img/products/galletas-choco-chip.svg') }}" alt="Ilustración de galletas con chocolate">
+            <div>
+                <strong>Galletas Choco Chip</strong>
+                <span>$8.000</span>
+            </div>
+            <div class="qty-control">
+                <button type="button">-</button>
+                <span>1</span>
+                <button type="button">+</button>
+            </div>
+        </div>
+        <div class="cart-total">
+            <span>Subtotal</span>
+            <strong>$18.000</strong>
+        </div>
+        <a href="{{ url_for('cart.cart') }}" class="primary-btn small wide">Finalizar compra</a>
+    </aside>
+</section>
+
+<section class="features-band container">
+    <div class="feature-box">
+        <span>✅</span>
+        <div>
+            <h3>Ingredientes premium</h3>
+            <p>Solo seleccionamos materia prima de alta calidad.</p>
+        </div>
+    </div>
+    <div class="feature-box">
+        <span>🚚</span>
+        <div>
+            <h3>Entrega segura</h3>
+            <p>Embalaje cuidadoso y entrega a tiempo en todo el país.</p>
+        </div>
+    </div>
+    <div class="feature-box">
+        <span>💬</span>
+        <div>
+            <h3>Atención cálida</h3>
+            <p>Respondemos con rapidez y asesoría personalizada.</p>
+        </div>
+    </div>
+</section>
+
+<section class="premium-banner container">
+    <div class="premium-banner-inner">
+        <div class="premium-copy">
+            <h2>Plan Premium</h2>
+            <p>Accede a descuentos exclusivos, recetas especiales y promociones para quienes viven con dulzor.</p>
+            <ul>
+                <li>Descuentos exclusivos</li>
+                <li>Recetas especiales</li>
+                <li>Promociones mensuales</li>
+                <li>Acceso anticipado</li>
+            </ul>
+            <a href="{{ url_for('main.premium') }}" class="primary-btn small">Ver planes</a>
+        </div>
+        <div class="premium-image">
+            <img src="{{ url_for('static', filename='img/products/combo-de-postres.svg') }}" alt="Ilustración de postres para compartir">
+        </div>
+    </div>
+</section>
+
+{% if reviews %}
+<section class="reviews container">
+    <div class="section-header">
+        <div>
+            <h2>Opiniones verificadas</h2>
+            <p>Lo que dicen nuestros clientes después de probar SweetDreams.</p>
+        </div>
+    </div>
+    <div class="reviews-grid">
+        {% for review in reviews %}
+            <article class="review-card">
+                <div class="stars">★★★★★</div>
+                <p>"{{ review.comment }}"</p>
+                <strong>Cliente SweetDreams</strong>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<section class="newsletter container">
+    <div class="newsletter-card">
+        <div>
+            <span class="section-kicker">Boletín SweetDreams</span>
+            <h2>Recibe promociones y recetas exclusivas.</h2>
+        </div>
+        <form class="newsletter-form">
+            <input type="email" placeholder="Tu correo electrónico">
+            <button type="submit" class="primary-btn small">Suscribirme</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Iniciar sesión{% endblock %}
+{% block content %}
+<section class="auth-shell container">
+    <form method="post" class="auth-form">
+        {{ form.hidden_tag() }}
+        <h1>Iniciar sesión</h1>
+        <div class="field-group">
+            {{ form.email.label }}
+            {{ form.email() }}
+        </div>
+        <div class="field-group">
+            {{ form.password.label }}
+            {{ form.password() }}
+        </div>
+        <button type="submit" class="primary-btn">{{ form.submit.label.text }}</button>
+        <p>¿No tienes cuenta? <a href="{{ url_for('auth.register') }}">Regístrate</a></p>
+    </form>
+</section>
+{% endblock %}

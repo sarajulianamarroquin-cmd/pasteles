@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Formulario de producto{% endblock %}
+{% block content %}
+<section class="container admin-shell">
+    <h1>{% if product %}Editar producto{% else %}Crear producto{% endif %}</h1>
+    <form method="post" class="auth-form">
+        <div class="field-group">
+            <label>Nombre</label>
+            <input type="text" name="name" value="{{ product.name if product else '' }}" required>
+        </div>
+        <div class="field-group">
+            <label>Descripción</label>
+            <textarea name="description" required>{{ product.description if product else '' }}</textarea>
+        </div>
+        <div class="field-group">
+            <label>Categoría</label>
+            <select name="category_id">
+                {% for category in categories %}
+                    <option value="{{ category.id }}" {% if product and category.id == product.category_id %}selected{% endif %}>{{ category.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="field-group">
+            <label>Precio</label>
+            <input type="number" min="0" step="100" name="price" value="{{ product.price if product else 0 }}" required>
+        </div>
+        <div class="field-group">
+            <label>Stock</label>
+            <input type="number" min="0" name="stock" value="{{ product.stock if product else 0 }}" required>
+        </div>
+        <div class="field-group">
+            <label>Imagen (URL)</label>
+            <input type="text" name="image" value="{{ product.image if product else '' }}">
+        </div>
+        <div class="checkbox-row">
+            <input type="checkbox" name="available" {% if product and product.available %}checked{% endif %}>
+            <label>Disponible</label>
+        </div>
+        <button type="submit" class="primary-btn">Guardar</button>
+    </form>
+</section>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}SweetDreams Premium{% endblock %}
+{% block content %}
+<section class="page-header container">
+    <div>
+        <h1>SweetDreams Premium</h1>
+        <p>Accede a beneficios, descuentos y exclusivas recetas del chef.</p>
+    </div>
+</section>
+<section class="container premium-grid">
+    {% for plan in plans %}
+        <article class="premium-card">
+            <h3>{{ plan.name }}</h3>
+            <p>{{ plan.description }}</p>
+            <strong>${{ '{:,.0f}'.format(plan.price|float) }}</strong>
+            <ul>
+                {% for benefit in plan.benefits.split('\n') %}
+                    <li>{{ benefit }}</li>
+                {% endfor %}
+            </ul>
+            {% if current_user.is_authenticated %}
+                <form method="post" action="{{ url_for('premium.subscribe', plan_id=plan.id) }}">
+                    <button type="submit" class="primary-btn small">Suscribirme</button>
+                </form>
+            {% else %}
+                <a href="{{ url_for('auth.login') }}" class="primary-btn small">Iniciar sesión</a>
+            {% endif %}
+        </article>
+    {% endfor %}
+</section>
+{% endblock %}

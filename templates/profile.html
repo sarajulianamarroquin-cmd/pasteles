@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Mi perfil{% endblock %}
+{% block content %}
+<section class="page-header container">
+    <div>
+        <h1>Mi perfil</h1>
+        <p>Actualiza tus datos y gestión de pedidos.</p>
+    </div>
+</section>
+<section class="container profile-shell">
+    <form method="post" class="auth-form">
+        {{ form.hidden_tag() }}
+        <div class="field-group">
+            {{ form.name.label }}
+            {{ form.name() }}
+        </div>
+        <div class="field-group">
+            {{ form.email.label }}
+            {{ form.email() }}
+        </div>
+        <div class="field-group">
+            {{ form.address.label }}
+            {{ form.address() }}
+        </div>
+        <div class="field-group">
+            {{ form.phone.label }}
+            {{ form.phone() }}
+        </div>
+        <button type="submit" class="primary-btn">{{ form.submit.label.text }}</button>
+    </form>
+    <div class="profile-links">
+        <a href="{{ url_for('orders.orders') }}" class="secondary-btn">Ver historial de pedidos</a>
+    </div>
+</section>
+{% endblock %}

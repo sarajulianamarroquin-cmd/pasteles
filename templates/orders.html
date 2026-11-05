@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Mis pedidos{% endblock %}
+{% block content %}
+<section class="page-header container">
+    <div>
+        <h1>Mis pedidos</h1>
+        <p>Consulta el historial y el estado de tus compras.</p>
+    </div>
+</section>
+<section class="container orders-list">
+    {% for order in orders %}
+        <article class="order-card">
+            <div class="order-head">
+                <strong>Pedido #{{ order.id }}</strong>
+                <span>{{ order.status }}</span>
+            </div>
+            <p>{{ order.delivery_address }}</p>
+            <p>${{ '{:,.0f}'.format(order.total|float) }}</p>
+            <ul>
+                {% for item in order.items %}
+                    <li>{{ item.product_name }} x {{ item.quantity }}</li>
+                {% endfor %}
+            </ul>
+        </article>
+    {% else %}
+        <p>No hay pedidos registrados.</p>
+    {% endfor %}
+</section>
+{% endblock %}

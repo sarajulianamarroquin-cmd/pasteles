@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}{{ recipe.name }} | Recetas SweetDreams{% endblock %}
+{% block content %}
+<section class="container recipe-detail-page">
+    <a class="recipe-back" href="{{ url_for('main.recipes') }}">← Volver a todas las recetas</a>
+    <div class="recipe-detail-layout">
+        <div class="recipe-detail-photo">
+            <img src="{{ recipe.image }}" alt="{{ recipe.name }}">
+        </div>
+        <div class="recipe-detail-intro">
+            <span class="section-kicker">Recetario SweetDreams · {{ recipe.difficulty }}</span>
+            <h1>{{ recipe.name }}</h1>
+            <p>{{ recipe.description }}</p>
+            <div class="recipe-detail-facts">
+                <div><span>Tiempo total</span><strong>{{ recipe.prep_time }}</strong></div>
+                <div><span>Porciones</span><strong>{{ recipe.servings }}</strong></div>
+                <div><span>Dificultad</span><strong>{{ recipe.difficulty }}</strong></div>
+            </div>
+        </div>
+    </div>
+    <div class="recipe-content-layout">
+        <section class="recipe-ingredients">
+            <span class="section-kicker">Antes de empezar</span>
+            <h2>Ingredientes</h2>
+            <ul>
+                {% for ingredient in recipe.ingredients.split('\n') %}
+                    {% if ingredient.strip() %}<li>{{ ingredient.strip() }}</li>{% endif %}
+                {% endfor %}
+            </ul>
+        </section>
+        <section class="recipe-method">
+            <span class="section-kicker">Paso a paso</span>
+            <h2>Preparación</h2>
+            <ol>
+                {% for instruction in recipe.instructions.split('\n') %}
+                    {% if instruction.strip() %}
+                        {% set instruction_parts = instruction.strip().split('. ', 1) %}
+                        <li>{{ instruction_parts[1] if instruction_parts|length > 1 else instruction.strip() }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ol>
+        </section>
+    </div>
+</section>
+{% endblock %}

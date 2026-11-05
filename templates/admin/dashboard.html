@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Panel administrador{% endblock %}
+{% block content %}
+<section class="container admin-shell">
+    <h1>Panel administrativo</h1>
+    <div class="stats-grid">
+        <div class="stat-card"><span>Productos</span><strong>{{ products_count }}</strong></div>
+        <div class="stat-card"><span>Pedidos</span><strong>{{ orders_count }}</strong></div>
+        <div class="stat-card"><span>Usuarios</span><strong>{{ users_count }}</strong></div>
+    </div>
+    <div class="admin-links">
+        <a href="{{ url_for('admin.admin_products') }}" class="primary-btn">Gestionar productos</a>
+        <a href="{{ url_for('admin.admin_orders') }}" class="secondary-btn">Ver pedidos</a>
+    </div>
+    <div class="admin-table">
+        {% for order in recent_orders %}
+            <div class="order-row">
+                <span>Pedido #{{ order.id }}</span>
+                <span>{{ order.status }}</span>
+                <span>${{ '{:,.0f}'.format(order.total|float) }}</span>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

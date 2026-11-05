@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Productos | Admin{% endblock %}
+{% block content %}
+<section class="container admin-shell">
+    <h1>Productos</h1>
+    <a href="{{ url_for('admin.product_new') }}" class="primary-btn">Crear producto</a>
+    <div class="admin-table">
+        {% for product in products %}
+            <div class="order-row">
+                <span>{{ product.name }}</span>
+                <span>{{ product.stock }} uds</span>
+                <span>${{ '{:,.0f}'.format(product.price|float) }}</span>
+                <div>
+                    <a href="{{ url_for('admin.product_edit', product_id=product.id) }}" class="secondary-btn small">Editar</a>
+                    <form method="post" action="{{ url_for('admin.product_delete', product_id=product.id) }}">
+                        <button type="submit" class="remove-btn">Eliminar</button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Registrarse{% endblock %}
+{% block content %}
+<section class="auth-shell container">
+    <form method="post" class="auth-form">
+        {{ form.hidden_tag() }}
+        <h1>Crear cuenta</h1>
+        <div class="field-group">
+            {{ form.name.label }}
+            {{ form.name() }}
+        </div>
+        <div class="field-group">
+            {{ form.email.label }}
+            {{ form.email() }}
+        </div>
+        <div class="field-group">
+            {{ form.password.label }}
+            {{ form.password() }}
+        </div>
+        <button type="submit" class="primary-btn">{{ form.submit.label.text }}</button>
+        <p>¿Ya tienes cuenta? <a href="{{ url_for('auth.login') }}">Inicia sesión</a></p>
+    </form>
+</section>
+{% endblock %}

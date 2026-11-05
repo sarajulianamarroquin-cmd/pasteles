@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SweetDreams{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+    <div class="top-promo">
+        <div class="container top-promo-inner">
+            <span>Envío gratis en pedidos + $60.000</span>
+            <span>Pedidos en 24–48 horas</span>
+        </div>
+    </div>
+    <header class="topbar">
+        <div class="container nav-wrap">
+            <div class="brand">
+                <span class="brand-icon">🍰</span>
+                <span>SweetDreams</span>
+                <small>Postres que hacen feliz</small>
+            </div>
+            <nav class="nav-links">
+                <a href="{{ url_for('main.index') }}">Inicio</a>
+                <a href="{{ url_for('products.products') }}">Productos</a>
+                <a href="{{ url_for('main.recipes') }}">Recetas</a>
+                <a href="{{ url_for('main.information') }}">Información</a>
+                <a href="{{ url_for('main.premium') }}">Plan Premium</a>
+                <a href="{{ url_for('main.contact') }}">Contacto</a>
+                <a href="{{ url_for('cart.cart') }}">Carrito</a>
+            </nav>
+            <div class="nav-actions">
+                <form class="search-form" action="{{ url_for('products.products') }}" method="get">
+                    <input type="search" name="q" placeholder="Buscar postres" aria-label="Buscar postres">
+                </form>
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('auth.profile') }}" class="nav-link-user">{{ current_user.name }}</a>
+                    <a href="{{ url_for('auth.logout') }}" class="nav-link-user">Salir</a>
+                {% else %}
+                    <a href="{{ url_for('auth.login') }}" class="nav-link-user">Iniciar sesión</a>
+                {% endif %}
+                <a href="{{ url_for('cart.cart') }}" class="cart-pill">🛒 <span>{{ cart_count }}</span></a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-wrapper container">
+                    {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div>
+                <div class="brand footer-brand">
+                    <span class="brand-icon">🍰</span>
+                    <span>SweetDreams</span>
+                    <small>Postres que hacen feliz</small>
+                </div>
+            </div>
+            <div>
+                <h4>Enlaces</h4>
+                <ul>
+                    <li><a href="{{ url_for('main.index') }}">Inicio</a></li>
+                    <li><a href="{{ url_for('products.products') }}">Productos</a></li>
+                    <li><a href="{{ url_for('main.recipes') }}">Recetas</a></li>
+                    <li><a href="{{ url_for('main.premium') }}">Premium</a></li>
+                    <li><a href="{{ url_for('main.contact') }}">Contacto</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Contacto</h4>
+                <ul>
+                    <li>ventas@sweetdreams.com</li>
+                    <li>+57 300 123 4567</li>
+                    <li>Bogotá, Colombia</li>
+                </ul>
+            </div>
+            <div>
+                <h4>Políticas</h4>
+                <ul>
+                    <li><a href="{{ url_for('main.shipping_policy') }}">Envíos</a></li>
+                    <li><a href="{{ url_for('main.privacy_policy') }}">Privacidad</a></li>
+                    <li><a href="{{ url_for('main.returns_policy') }}">Devoluciones</a></li>
+                    <li><a href="{{ url_for('main.faq') }}">FAQ</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                © 2026 SweetDreams. Todos los derechos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

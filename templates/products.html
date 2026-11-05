@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}SweetDreams | Productos{% endblock %}
+{% block content %}
+<section class="page-header container">
+    <div>
+        <h1>Nuestros Productos</h1>
+        <p>Descubre {{ pagination.total }} creaciones artesanales con ingredientes seleccionados y sabor inolvidable.</p>
+    </div>
+</section>
+
+<section class="catalog container">
+    <aside class="catalog-filters">
+        <h3>Filtrar</h3>
+        <form method="get" action="{{ url_for('products.products') }}">
+            <label>Buscar</label>
+            <input type="text" name="q" value="{{ current_query }}" placeholder="Buscar producto">
+            <label>Categoría</label>
+            <select name="category">
+                <option value="">Todas</option>
+                {% for category in categories %}
+                    <option value="{{ category.id }}" {% if current_category == category.id %}selected{% endif %}>{{ category.name }}</option>
+                {% endfor %}
+            </select>
+            <label>Ordenar por</label>
+            <select name="sort">
+                <option value="name" {% if current_sort == 'name' %}selected{% endif %}>Nombre</option>
+                <option value="precio_asc" {% if current_sort == 'precio_asc' %}selected{% endif %}>Precio: menor a mayor</option>
+                <option value="precio_desc" {% if current_sort == 'precio_desc' %}selected{% endif %}>Precio: mayor a menor</option>
+            </select>
+            <button type="submit" class="primary-btn small">Aplicar</button>
+        </form>
+    </aside>
+
+    <div class="catalog-results">
+        <div class="product-grid">
+            {% for product in products %}
+                <article class="product-card">
+                    <div class="product-badge">{{ product.category.name }}</div>
+                    <img src="{{ product.image }}" alt="{{ product.name }}">
+                    <div class="product-body">
+                        <h3>{{ product.name }}</h3>
+                        <p>{{ product.description }}</p>
+                        <strong>COP ${{ '{:,.0f}'.format(product.price|float) }}</strong>
+                        <div class="product-actions">
+                            <a href="{{ url_for('products.product_detail', product_id=product.id) }}" class="secondary-btn">Ver detalles</a>
+                            <form method="post" action="{{ url_for('cart.add_to_cart', product_id=product.id) }}">
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" class="primary-btn small">Agregar</button>
+                            </form>
+                        </div>
+                    </div>
+                </article>
+            {% else %}
+                <p>No hay productos con esos filtros.</p>
+            {% endfor %}
+        </div>
+
+        {% if pagination and pagination.pages > 1 %}
+            <div class="pagination">
+                {% if pagination.has_prev %}
+                    <a href="{{ url_for('products.products', page=pagination.prev_num, q=current_query, category=current_category, sort=current_sort) }}">Anterior</a>
+                {% endif %}
+                {% for page_num in range(1, pagination.pages + 1) %}
+                    <a href="{{ url_for('products.products', page=page_num, q=current_query, category=current_category, sort=current_sort) }}" class="{% if page_num == pagination.page %}active{% endif %}">{{ page_num }}</a>
+                {% endfor %}
+                {% if pagination.has_next %}
+                    <a href="{{ url_for('products.products', page=pagination.next_num, q=current_query, category=current_category, sort=current_sort) }}">Siguiente</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

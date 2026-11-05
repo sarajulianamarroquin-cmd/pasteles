@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Pedidos | Admin{% endblock %}
+{% block content %}
+<section class="container admin-shell">
+    <h1>Pedidos</h1>
+    <div class="admin-table">
+        {% for order in orders %}
+            <div class="order-row">
+                <span>Pedido #{{ order.id }}</span>
+                <span>{{ order.user.name if order.user else 'Cliente' }}</span>
+                <span>{{ order.status }}</span>
+                <span>${{ '{:,.0f}'.format(order.total|float) }}</span>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
